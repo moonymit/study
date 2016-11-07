@@ -38,7 +38,7 @@ public class Hole : MonoBehaviour {
 			// 중심 지점에서 공을 멈추기 위해 속도를 감속시킨다
 			r.velocity *= 0.9f;
 
-			r.AddForce (direction * r.mass * 20.0f);
+			r.AddForce (direction * r.mass * 40.0f);
 		} else {
 			r.AddForce ( -direction * r.mass * 80.0f);
 		}
