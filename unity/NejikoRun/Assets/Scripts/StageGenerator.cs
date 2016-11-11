@@ -44,7 +44,8 @@ public class StageGenerator : MonoBehaviour {
 		}
 
 		// 스테이지 보유 한도를 초과했다면 예전 스테이지를 삭제
-		while (generatedStageList.Count > preInstantiate + 2) DestroyOldestStage();
+		while (generatedStageList.Count > preInstantiate + 2) 
+			DestroyOldestStage();
 
 		currentTipIndex = toTipIndex;
 	}

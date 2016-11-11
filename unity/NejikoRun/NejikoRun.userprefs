@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/StageGenerator.cs">
+    <Files>
+      <File FileName="Assets/Scripts/NejikoController.cs" Line="122" Column="30" />
+      <File FileName="Assets/Scripts/SimpleFollow.cs" Line="11" Column="27" />
+      <File FileName="Assets/Scripts/StageGenerator.cs" Line="37" Column="3" />
+      <File FileName="Assets/Scripts/EnemyPoint.cs" Line="14" Column="32" />
+      <File FileName="Assets/Scripts/LifePanel.cs" Line="7" Column="2" />
+      <File FileName="Assets/Scripts/TitleController.cs" Line="13" Column="2" />
+      <File FileName="Assets/Scripts/GameController.cs" Line="32" Column="38" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

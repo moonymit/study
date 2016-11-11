@@ -13,7 +13,7 @@ public class TitleController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		highScoreLabel.text = "Hi Score : " + PlayerPrefs.GetInt ("HightScore") + "m";
+		highScoreLabel.text = "Hi Score : " + PlayerPrefs.GetInt ("HighScore") + "m";
 	}
 	
 	// Update is called once per frame

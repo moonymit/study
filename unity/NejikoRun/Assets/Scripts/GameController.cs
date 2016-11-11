@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
 			enabled = false;
 
 			// 하이 스코어를 업데이트
-			if (PlayerPrefs.GetInt ("HightScore") < score) {
+			if (PlayerPrefs.GetInt ("HighScore") < score) {
 				PlayerPrefs.SetInt ("HighScore", score);
 			}
 
