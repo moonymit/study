@@ -1,6 +1,6 @@
 var express = require('express')
 var session = require('express-session');
-var app = express()
+var app = express();
 
 app.set('trust proxy', 1)
 app.use(session({
