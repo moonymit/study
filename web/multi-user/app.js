@@ -78,8 +78,8 @@ app.post('/auth/login', function(req, res) {
 		// 		res.redirect('/welcome');
 		// 	})
 		// } 
-		res.send('Who are you? <a href="/auth/login">Login</a>');
 	}
+	res.send('Who are you? <a href="/auth/login">Login</a>');
 });
 
 var salt = "@#$#@dag#W#SDFAFf@";
