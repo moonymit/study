@@ -72,7 +72,7 @@ app.get('/welcome', function(req, res) {
 });
 
 passport.serializeUser(function(user, done) {
-	// session에 use.usename(식별자)이 저장된다 
+	// session에 use.authId이 식별자로 저장된다 
 	console.log('serializeUser', user);
 	done(null, user.authId);
 });
