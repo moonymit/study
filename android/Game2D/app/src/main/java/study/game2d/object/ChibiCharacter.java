@@ -94,11 +94,10 @@ public class ChibiCharacter extends GameObject {
         double movingVectorLength = Math.sqrt(movingVectorX * movingVectorX + movingVectorY * movingVectorY);
 
         // Calculate the new position of the game character.
-        this.x = x +  (int)(distance* movingVectorX / movingVectorLength);
-        this.y = y +  (int)(distance* movingVectorY / movingVectorLength);
+        this.x = x +  (int)(distance * movingVectorX / movingVectorLength);
+        this.y = y +  (int)(distance * movingVectorY / movingVectorLength);
 
         // When the game's character touches the edge of the screen, then change direction
-
         if(this.x < 0 )  {
             this.x = 0;
             this.movingVectorX = - this.movingVectorX;
@@ -136,8 +135,10 @@ public class ChibiCharacter extends GameObject {
     }
 
     public void draw(Canvas canvas)  {
+        // get matched bitmap
         Bitmap bitmap = this.getCurrentMoveBitmap();
-        canvas.drawBitmap(bitmap,x, y, null);
+        //x, y is calculated in the update();
+        canvas.drawBitmap(bitmap, x, y, null);
         // Last draw time.
         this.lastDrawNanoTime = System.nanoTime();
     }
