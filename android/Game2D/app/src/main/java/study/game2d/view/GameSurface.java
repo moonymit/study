@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,8 +22,17 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 
     private final List<ChibiCharacter> chibiList = new ArrayList<ChibiCharacter>();
 
-    public GameSurface(Context context)  {
+    public GameSurface(Context context) {
         super(context);
+        init(context);
+    }
+
+    public GameSurface(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public void init(Context context) {
 
         // Make Game Surface focusable so it can handle events.
         this.setFocusable(true);
@@ -36,6 +46,8 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
             chibi.update();
         }
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import study.game2d.R;
 import study.game2d.view.GameSurface;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
         // Set No Title
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        this.setContentView(new GameSurface(this));
+        setContentView(R.layout.activity_main);
+//        this.setContentView(new GameSurface(this));
+
+        GameSurface gameSurface = (GameSurface) findViewById(R.id.gameSurface);
+        gameSurface.init(getApplicationContext());
+
     }
 }
