@@ -117,6 +117,7 @@ text = nltk.Text(tokens, name='NMSC')
 
 
 ############# -- Sentiment classification with doc2vec-- #############
+#words는 문장의 태깅된 단어배열, tags는 0(부정), 1(긍정)
 TaggedDocument = namedtuple('TaggedDocument', 'words tags')
 
 #여기서는 15만개 training documents 전부 사용
