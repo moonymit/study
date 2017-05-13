@@ -19,7 +19,9 @@ rc('font', family=font_name, size=6)
 
 from collections import namedtuple
 from gensim.models import doc2vec
+
 from sklearn.linear_model import LogisticRegression
+from sklearn.externals import joblib
 
 from scipy import spatial
 
@@ -143,7 +145,7 @@ tagged_test_docs = [doc2vec.LabeledSentence(words=d,tags=[c]) for d, c in test_d
 # doc_vectorizer.save('doc2vec.model')
 
 
-# 위의 과정을 한 번 거쳤다면 load해서 사용
+# To load
 doc_vectorizer= doc2vec.Doc2Vec.load('doc2vec.model')
 
 # print_kor_list(doc_vectorizer.most_similar("ㅋㅋ/KoreanParticle"))
@@ -174,6 +176,15 @@ test_tags = [doc.tags[0] for doc in tagged_test_docs]
 classifier = LogisticRegression(random_state=1234)
 classifier.fit(train_words, train_tags)
 
+filename = 'classifier.joblib.pkl'
+
+# To save
+_ = joblib.dump(classifier, filename, compress=9)
+# To load
+classifier = joblib.load(filename)
+
 print(classifier.predict([doc_vectorizer.infer_vector(["김기철/Noun", "재미/Noun", '없다/Noun', '개판/Noun'])]))
+print(classifier.predict([doc_vectorizer.infer_vector(["별로다/Noun", "재미없다/Noun", '쓰레기/Noun', '발연기/Noun'])]))
 print(classifier.predict([doc_vectorizer.infer_vector(["재밌다/Noun", "추천/Noun", '영화/Noun', '최고다/Noun'])]))
+print(classifier.predict([doc_vectorizer.infer_vector(["꿀잼/Noun", "명연기/Noun", '잼/Noun', '액션/Noun'])]))
 print(classifier.score(test_words, test_tags))
