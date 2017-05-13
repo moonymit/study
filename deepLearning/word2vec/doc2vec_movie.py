@@ -21,6 +21,7 @@ from collections import namedtuple
 from gensim.models import doc2vec
 from sklearn.linear_model import LogisticRegression
 
+from scipy import spatial
 
 pos_tagger = Twitter()
 
@@ -51,6 +52,7 @@ def write_tagging_data(data, filename):
             word.append(doc[1])
             f.write(' '.join(word) + '\n')
 
+
 train_data = read_file('./nsmc-master/ratings_train.txt')
 test_data = read_file('./nsmc-master/ratings_test.txt')
 
@@ -68,7 +70,7 @@ test_data = read_file('./nsmc-master/ratings_test.txt')
 # write_tagging_data(train_docs, 'train_docs_voca.txt')
 # write_tagging_data(test_docs, 'test_docs_voca.txt')
 
-train_docs = read_tagging_data('train_docs_voca.txt') #태깅된 데이터를 불러온다
+train_docs = read_tagging_data('train_docs_voca.txt') #태깅된 데이터를 불러온다, [([단어배열], 점수), ]
 test_docs = read_tagging_data('test_docs_voca.txt')
 
 # print_kor_list(train_docs)
@@ -76,10 +78,10 @@ test_docs = read_tagging_data('test_docs_voca.txt')
 
 ################# -- Data exploration (feat.NLTK) -- #################
 
-tokens = [t for d in train_docs for t in d[0]] # 토큰만 모은다.
+# tokens = [t for d in train_docs for t in d[0]] # 토큰만 모은다.
 # print(len(tokens))
 
-text = nltk.Text(tokens, name='NMSC')
+# text = nltk.Text(tokens, name='NMSC')
 # print(text)
 # print(len(text.tokens)) # 전체 토큰의 갯수
 # print(len(set(text.tokens))) # 유니크한 토큰의 갯수
@@ -96,7 +98,6 @@ text = nltk.Text(tokens, name='NMSC')
 
 #최빈도 단어 2000개를 피쳐로 사용
 # selected_words = [f[0] for f in text.vocab().most_common(2000)]
-# print_kor_list(selected_words)
 
 # def term_exists(doc):
 #     return {'exists({})'.format(word):(word in set(doc)) for word in selected_words}
@@ -107,6 +108,7 @@ text = nltk.Text(tokens, name='NMSC')
 
 # train_xy = [(term_exists(d),c) for d, c in train_docs]
 # test_xy = [(term_exists(d),c) for d, c in test_docs]
+# print_kor_list(test_xy)
 
 # Naive Bayes Classifier 사용
 # classifier = nltk.NaiveBayesClassifier.train(train_xy)
@@ -118,11 +120,14 @@ text = nltk.Text(tokens, name='NMSC')
 
 ############# -- Sentiment classification with doc2vec-- #############
 #words는 문장의 태깅된 단어배열, tags는 0(부정), 1(긍정)
-TaggedDocument = namedtuple('TaggedDocument', 'words tags')
+# TaggedDocument = namedtuple('TaggedDocument', 'words labels')
 
 #여기서는 15만개 training documents 전부 사용
 # tagged_train_docs = [TaggedDocument(d,[c]) for d, c in train_docs]
 # tagged_test_docs = [TaggedDocument(d,[c]) for d, c in test_docs]
+
+tagged_train_docs = [doc2vec.LabeledSentence(words=d,tags=[c]) for d, c in train_docs]
+tagged_test_docs = [doc2vec.LabeledSentence(words=d,tags=[c]) for d, c in test_docs]
 
 #사전 구축
 # doc_vectorizer = doc2vec.Doc2Vec(size=300, alpha=0.025, min_alpha=0.025, seed=1234)
@@ -134,28 +139,41 @@ TaggedDocument = namedtuple('TaggedDocument', 'words tags')
 #     doc_vectorizer.alpha -= 0.002 #decrease the learning rate
 #     doc_vectorizer.min_alpha = doc_vectorizer.alpha # fix the learning rate no decay
 
-#To save
+# To save
 # doc_vectorizer.save('doc2vec.model')
 
 
 # 위의 과정을 한 번 거쳤다면 load해서 사용
 doc_vectorizer= doc2vec.Doc2Vec.load('doc2vec.model')
 
-print_kor_list(doc_vectorizer.most_similar("ㅋㅋ/KoreanParticle"))
-print_kor_list(doc_vectorizer.most_similar("공포/Noun"))
-print_kor_list(doc_vectorizer.most_similar(positive=['여자/Noun', '왕/Noun'], negative=['남자/Noun']))
+# print_kor_list(doc_vectorizer.most_similar("ㅋㅋ/KoreanParticle"))
+# print_kor_list(doc_vectorizer.most_similar("공포/Noun"))
+# print_kor_list(doc_vectorizer.most_similar(positive=['여자/Noun', '왕/Noun'], negative=['남자/Noun']))
 
-#마지막 분류 단계. 분류를 위한 피쳐들을 마련
-train_x = [doc_vectorizer.infer_vector(doc.words) for doc in tagged_train_docs]
-train_y = [doc.tags[0] for doc in tagged_train_docs]
-len(train_x)       # 사실 이 때문에 앞의 term existance와는 공평한 비교는 아닐 수 있다
-len(train_x[0])
+# w = filter(lambda x: x in doc_vectorizer.wv.vocab, ["김기철/Noun", "재미/Noun", '없다/Noun', '개판/Noun'])
+# print_kor_list(doc_vectorizer.most_similar(w))
 
-test_x = [doc_vectorizer.infer_vector(doc.words) for doc in tagged_test_docs]
-test_y = [doc.tags[0] for doc in tagged_test_docs]
-len(test_x)
-len(test_x[0])
+#새로운 문장을 학습된 모델을 기반으로 벡터로 표현
+# print_kor_list(doc_vectorizer.infer_vector(["김기철/Noun", "재미/Noun", '없다/Noun', '개판/Noun']));
+# print_kor_list(doc_vectorizer.infer_vector(["김기철/Noun", "윤예지/Noun"]));
 
+# #마지막 분류 단계. 분류를 위한 피쳐들을 마련 : (새로운) 문장들을 벡터로 표현
+train_words = [doc_vectorizer.infer_vector(doc.words) for doc in tagged_train_docs]
+train_tags = [doc.tags[0] for doc in tagged_train_docs]
+
+# len(train_words)       # 사실 이 때문에 앞의 term existance와는 공평한 비교는 아닐 수 있다
+# len(train_words[0])
+
+test_words = [doc_vectorizer.infer_vector(doc.words) for doc in tagged_test_docs]
+test_tags = [doc.tags[0] for doc in tagged_test_docs]
+# len(test_x)
+# len(test_x[0])
+
+
+# 생성된 벡터들을 이용하여 Classification
 classifier = LogisticRegression(random_state=1234)
-classifier.fit(train_x, train_y)
-classifier.score(test_x, test_y)
+classifier.fit(train_words, train_tags)
+
+print(classifier.predict([doc_vectorizer.infer_vector(["김기철/Noun", "재미/Noun", '없다/Noun', '개판/Noun'])]))
+print(classifier.predict([doc_vectorizer.infer_vector(["재밌다/Noun", "추천/Noun", '영화/Noun', '최고다/Noun'])]))
+print(classifier.score(test_words, test_tags))
