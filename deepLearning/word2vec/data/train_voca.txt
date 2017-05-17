@@ -1,0 +1,56 @@
+여름/Noun 찍다/Verb 사진/Noun 골/Noun 보이다/Verb SEARCH
+어제/Noun 찍다/Verb 사진/Noun 뭐/Noun SEARCH
+꽃/Noun 나오다/Verb 사진/Noun 보이다/Verb SEARCH
+바다/Noun 나오다/Verb 사진/Noun SEARCH
+내/Noun 나오다/Verb 사진/Noun 보다/Verb SEARCH
+닉/Noun 나오다/Verb 사진/Noun 찰리/Noun 사진/Noun 골/Noun 보이다/Verb SEARCH
+나/Noun 혼자/Noun 나오다/Verb 사진/Noun SEARCH
+작년/Noun 겨울/Noun 눈/Noun 온/Noun 사진/Noun SEARCH
+보이다/Verb 사진/Noun 보이다/Verb SEARCH
+내/Noun 나오다/Verb 사진/Noun 검색/Noun SEARCH
+올해/Noun 겨울/Noun 찍다/Verb 사진/Noun 검색/Noun SEARCH
+어제/Noun 찍다/Verb 사진/Noun 중/Noun 찰리/Noun 나오다/Verb 것/Noun 검색/Noun 해주다/Verb SEARCH
+갤러리/Noun 여름/Noun 사진/Noun 보이다/Verb SEARCH
+갤러리/Noun 오늘/Noun 찍다/Verb 사진/Noun 검색/Noun SEARCH
+올해/Noun 겨울/Noun 찍다/Verb 사진/Noun 갤러리/Noun 검색/Noun 보이다/Verb SEARCH
+사진첩/Noun 부산/Noun 찍다/Verb 사진/Noun 알다/Verb SEARCH
+사진첩/Noun 셀카/Noun 찍다/Verb 사진/Noun 검색/Noun 해보다/Verb SEARCH
+작년/Noun 봄/Noun 찍다/Verb 사진/Noun 중/Noun 꽃/Noun 나오다/Verb 것/Noun 볼/Noun SEARCH
+기분/Noun 기분/Noun 사진/Noun 보다/Verb SEARCH
+작년/Noun 친구/Noun 찍다/Verb 사진/Noun 보다/Verb SEARCH
+최근/Noun 내/Noun 나오다/Verb 사진/Noun 개/Noun 보이다/Verb SEARCH
+오늘/Noun 찍다/Verb 사진/Noun 모두/Noun 검색/Noun SEARCH
+오키나와/Noun 엄마/Noun 찍다/Verb 사진/Noun 보이다/Verb SEARCH
+작년/Noun 겨울/Noun 예지/Noun 찍다/Verb 사진/Noun 보다/Verb SEARCH
+바다/Noun 관련/Noun 되다/Verb 사진/Noun 보이다/Verb SEARCH
+자다/Verb 기억/Noun 안나/Noun 작년/Noun 여행가/Noun 찍다/Verb 사진/Noun 검색/Noun 해주다/Verb SEARCH
+내/Noun 동생/Noun 나오다/Verb 사진/Noun 주다/Verb 봐/Noun SEARCH
+눈/Noun 내리다/Verb 사진/Noun 좀/Noun SEARCH
+찰리/Noun 카카오/Noun 톡/Noun 보내다/Verb SEND
+소피/Noun 방금/Noun 분류/Noun 사진/Noun 전송/Noun SEND
+이/Noun 사진/Noun 파이/Noun 보내다/Verb SEND
+앞/Noun 사진/Noun 매다/Verb 닉/Noun 전송/Noun 해주다/Verb SEND
+파이/Noun 소피/Noun 방금/Noun 검색/Noun 되다/Verb 사진/Noun 보내다/Verb SEND
+위/Noun 사진/Noun 모두/Noun 와이프/Noun 전송/Noun 해주다/Verb SEND
+월요일/Noun 사진/Noun 엄마/Noun 보내다/Verb SEND
+검색/Noun 되다/Verb 사진/Noun 중/Noun 개/Noun 소피/Noun 전송/Noun SEND
+검색/Noun 되다/Verb 사진/Noun 파이/Noun 전송/Noun 해주다/Verb SEND
+지금/Noun 나오다/Verb 사진/Noun 세/Noun 장만/Noun 할머니/Noun 보내다/Verb SEND
+이메일/Noun 예지/Noun 전송/Noun 해주다/Verb SEND
+방금/Noun 검색/Noun 되다/Verb 사진/Noun 내일/Noun 보내다/Verb SEND
+찰리/Noun 카카오/Noun 톡/Noun 보내다/Verb SEND
+소피/Noun 방금/Noun 분류/Noun 사진/Noun 전송/Noun SEND
+이/Noun 사진/Noun 파이/Noun 보내다/Verb SEND
+앞/Noun 사진/Noun 매다/Verb 닉/Noun 전송/Noun 해주다/Verb SEND
+파이/Noun 소피/Noun 방금/Noun 검색/Noun 되다/Verb 사진/Noun 보내다/Verb SEND
+위/Noun 사진/Noun 모두/Noun 와이프/Noun 전송/Noun 해주다/Verb SEND
+월요일/Noun 사진/Noun 엄마/Noun 보내다/Verb SEND
+검색/Noun 되다/Verb 사진/Noun 중/Noun 개/Noun 소피/Noun 전송/Noun SEND
+검색/Noun 되다/Verb 사진/Noun 파이/Noun 전송/Noun 해주다/Verb SEND
+지금/Noun 나오다/Verb 사진/Noun 세/Noun 장만/Noun 할머니/Noun 보내다/Verb SEND
+이메일/Noun 예지/Noun 전송/Noun 해주다/Verb SEND
+방금/Noun 검색/Noun 되다/Verb 사진/Noun 내일/Noun 보내다/Verb SEND
+그것/Noun 삼촌/Noun 전송/Noun SEND
+검색/Noun 되다/Verb 사진/Noun 친구/Noun 보내다/Verb SEND
+와이프/Noun 전송/Noun SEND
+친척/Noun 누/Noun 전달/Noun SEND

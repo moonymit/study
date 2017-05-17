@@ -122,12 +122,14 @@ test_docs = read_tagging_data('test_docs_voca.txt')
 
 ############# -- Sentiment classification with doc2vec-- #############
 #words는 문장의 태깅된 단어배열, tags는 0(부정), 1(긍정)
-# TaggedDocument = namedtuple('TaggedDocument', 'words labels')
 
-#여기서는 15만개 training documents 전부 사용
+# 트레이닝셋 준비하는 방법1
+# TaggedDocument = namedtuple('TaggedDocument', 'words labels')
+#   여기서는 15만개 training documents 전부 사용
 # tagged_train_docs = [TaggedDocument(d,[c]) for d, c in train_docs]
 # tagged_test_docs = [TaggedDocument(d,[c]) for d, c in test_docs]
 
+# 트레이닝셋 준비하는 방법2
 tagged_train_docs = [doc2vec.LabeledSentence(words=d,tags=[c]) for d, c in train_docs]
 tagged_test_docs = [doc2vec.LabeledSentence(words=d,tags=[c]) for d, c in test_docs]
 
