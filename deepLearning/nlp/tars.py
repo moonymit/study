@@ -9,6 +9,8 @@ import random
 import codecs
 import pickle
 
+from nltk.tree import ParentedTree
+
 from pathlib import Path
 from matplotlib import font_manager, rc
 
@@ -107,7 +109,7 @@ else:
 # Classification Test
 test_docs = [u'오키나와에서 파이, 닉과 함께 찍은 노란 꽃 사진들만 보여줘',
              u'방금 찾은 사진 소피한테 전송!!',
-             u'작년 겨울에 찍은 이쁜 꽃 사진 그리고 구름 사진을 명수 그리고 하하에게 전송',
+             u'작년 겨울에 찍은 이쁜 꽃 사진 그리고 구름 사진을 명수 그리고 하하한테 전송해줘',
              u'명수 그리고 하하에게 올해 겨울에 찍은 노란 꽃 사진 그리고 구름 사진 보내줘',
              u'오늘 찍은 꽃 사진, 재석에게 보내줘']
 
@@ -130,15 +132,32 @@ def printChunks(chunks, label):
             print(' '.join((e[0] for e in list(subtree))))
 
 # Object, Nouns,
-def parseDoc(pos_doc):
-    parse = {'NP':[]}
-    for subtree in chunks.subtrees():
-        if subtree.label()== 'NP':
-            #parse['NP'].append([leaf[0] for leaf in list(subtree))
-            # parse['NP'].append([leaf[0] for leaf in list(subtree) if leaf[1] != 'Conjunction'])
-            parse['NP'].append([leaf[0] for leaf in list(subtree)
-                if leaf[1] != 'Conjunction' and leaf[0] != u'사진'])
+def parseDoc(chunks, pos_doc):
 
+    i_obj_josa = ['에게', '한테']
+    d_obj_josa = ['을', '를']
+
+    parse = {'Noun':[], 'Adjective':[], 'NP':[], 'Object':[], 'Tag':[]}
+    parse['Noun'] = [ t[0] for t in pos_doc if t[1] == 'Noun' and t[0] != u'사진']
+    parse['Adjective'] = [ t[0] for t in pos_doc if t[1] == 'Adjective']
+
+    for idx, node in enumerate(chunks):
+        if type(node) == nltk.Tree and node.label()== 'NP':
+            pprint(u'label:' + node.label())
+
+            # NP = [leaf[0] for leaf in list(node) if leaf[0] != u'사진' and leaf[1] != 'Conjunction']
+            NP = [leaf[0] for leaf in list(node)]
+            parse['NP'].append(NP)
+
+            if idx + 1 < len(chunks) \
+                and chunks[idx+1][0] in i_obj_josa \
+                and chunks[idx+1][1] == 'Josa' :
+
+                pprint(u'Josa in i_obj_josa: {} {}'.format(chunks[idx+1][0], chunks[idx+1][1]))
+                parse['Object'] += NP
+
+    parse['Object'] = list(set(parse['Object']) - set([u'그리고']))
+    parse['Tag'] += list(set(parse['Noun']) - set(parse['Object']) - set(['전송']))
     return parse
 
 # pos_doc = twitter.pos(test_docs[0], norm=True, stem=True)
@@ -161,22 +180,5 @@ pprint(pos_noun_adj)
 
 # Parse
 print("\n# Print Parsed Dictionary")
-parse_doc = parseDoc(pos_doc)
+parse_doc = parseDoc(chunks, pos_doc)
 pprint(parse_doc)
-
-# pos_docs = [twitter.pos(doc, norm=True, stem=True) for doc in test_docs]
-#
-# parser = nltk.RegexpParser("NP: {<Adjective>*<Noun>*}")
-# chunks = [parser.parse(doc) for doc in pos_docs]
-#
-# for chunk in chunks :
-#     printChunks(chunk, 'NP')
-#     chunk.draw()
-
-
-
-# pprint(twitter.morphs(u'오키나와에서 엄마와 함께 찍은 사진들만 보여줘', norm=True, stem=True))
-# pprint(twitter.pos(u'오키나와에서 엄마와 함께 찍은 사진들만 보여줘', norm=True, stem=True))
-# pprint(twitter.nouns(u'오키나와에서 엄마와 함께 찍은 사진들만 보여줘'))
-# pprint(twitter.nouns(u'아버지가방에들어가신다'))
-# pprint(twitter.nouns(u'작년겨울에 찍은 노란 꽃 사진 보여줘'))
