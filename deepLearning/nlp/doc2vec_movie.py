@@ -178,7 +178,7 @@ test_tags = [doc.tags[0] for doc in tagged_test_docs]
 classifier = LogisticRegression(random_state=1234)
 classifier.fit(train_words, train_tags)
 
-filename = 'classifier.joblib.pkl'
+filename = './data/classifier.joblib.pkl'
 
 # To save
 _ = joblib.dump(classifier, filename, compress=9)

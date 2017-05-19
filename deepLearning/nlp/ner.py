@@ -5,7 +5,7 @@ import konlpy
 import nltk
 
 # POS tag a sentence
-sentence = u'만 6세 이하의 초등학교 취학 전 자녀를 양육하기 위해서는'
+sentence = u'잘 기억은 안나지만 작년에 여행가서 찍은 사진 검색해줘'
 words = konlpy.tag.Twitter().pos(sentence)
 
 # Define a chunk grammar, or chunking rules, then chunk
@@ -14,9 +14,6 @@ grammar = "NP: {<N.*>*<Suffix>?}"
 NP: {<N.*>*<Suffix>?}   # Noun phrase 명사구
 VP: {<V.*>*}            # Verb phrase 동사구
 AP: {<A.*>*}            # Adjective phrase 형용사구
-NP: {<N.*>*<Suffix>?}   # Noun phrase
-VP: {<V.*>*}            # Verb phrase
-AP: {<A.*>*}            # Adjective phrase
   {<DT|JJ>}          # chunk determiners and adjectives
   }<[\.VI].*>+{      # chink any tag beginning with V, I, or .
   <.*>}{<DT>         # split a chunk at a determiner
