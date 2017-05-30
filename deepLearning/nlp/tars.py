@@ -136,6 +136,7 @@ def parseDoc(chunks, pos_doc):
 
     i_obj_josa = ['에게', '한테']
     d_obj_josa = ['을', '를']
+    time_noun_adverb = ['봄', '여름', '가을', '겨울', '작년', '올해', '지난', '어제', '내일']
 
     parse = {'Noun':[], 'Adjective':[], 'NP':[], 'Object':[], 'Tag':[]}
     parse['Noun'] = [ t[0] for t in pos_doc if t[1] == 'Noun' and t[0] != u'사진']
@@ -149,6 +150,7 @@ def parseDoc(chunks, pos_doc):
             NP = [leaf[0] for leaf in list(node)]
             parse['NP'].append(NP)
 
+            # Find Object & Find Josa for Object
             if idx + 1 < len(chunks) \
                 and chunks[idx+1][0] in i_obj_josa \
                 and chunks[idx+1][1] == 'Josa' :
@@ -157,11 +159,11 @@ def parseDoc(chunks, pos_doc):
                 parse['Object'] += NP
 
     parse['Object'] = list(set(parse['Object']) - set([u'그리고']))
-    parse['Tag'] += list(set(parse['Noun']) - set(parse['Object']) - set(['전송']))
+    parse['Tag'] += list(set(parse['Noun']) - set(parse['Object']) - set([u'전송']))
     return parse
 
 # pos_doc = twitter.pos(test_docs[0], norm=True, stem=True)
-pos_doc = twitter.pos(test_docs[3], norm=False, stem=False)
+pos_doc = twitter.pos(test_docs[2], norm=False, stem=False)
 # parser = nltk.RegexpParser("NP: {<Adjective>*<Noun>*}")
 parser = nltk.RegexpParser("NP: {(<Adjective>*<Noun>*<Conjunction>*)*}")
 chunks = parser.parse(pos_doc)

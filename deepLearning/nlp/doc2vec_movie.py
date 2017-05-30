@@ -80,14 +80,14 @@ test_docs = read_tagging_data('test_docs_voca.txt')
 
 ################# -- Data exploration (feat.NLTK) -- #################
 
-# tokens = [t for d in train_docs for t in d[0]] # 토큰만 모은다.
+tokens = [t for d in train_docs for t in d[0]] # 토큰만 모은다.
 # print(len(tokens))
 
-# text = nltk.Text(tokens, name='NMSC')
+text = nltk.Text(tokens, name='NMSC')
 # print(text)
 # print(len(text.tokens)) # 전체 토큰의 갯수
 # print(len(set(text.tokens))) # 유니크한 토큰의 갯수
-# print(text.vocab().most_common(10)) # 가장 많이 나온 단어 10개
+print_kor_list(text.vocab().most_common(50)) # 가장 많이 나온 단어 10개
 # print_kor_list(text.vocab().most_common(10))
 
 # text.plot(50) #가장 많이 나오는 상위 50개를 그래프로 출력
