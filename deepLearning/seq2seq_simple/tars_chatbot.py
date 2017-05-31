@@ -15,7 +15,7 @@ metadata, idx_q, idx_a = data.load_data(PATH='data/')
 # parameters 
 xseq_len = trainX.shape[-1]
 yseq_len = trainY.shape[-1]
-batch_size = 32
+batch_size = 16
 xvocab_size = len(metadata['idx2w'])  
 yvocab_size = xvocab_size
 emb_dim = 1024
@@ -29,11 +29,12 @@ model = tars_seq2seq.Seq2Seq(xseq_len=xseq_len,
                                ckpt_path='ckpt/',
                                embedding_dim=emb_dim,
                                num_layers=3,
-                               epochs = 5
+                               epochs = 10,
+                               save_freq = 5
                             )
 
 val_batch_gen = utils.rand_batch_gen(validX, validY, batch_size)
 train_batch_gen = utils.rand_batch_gen(trainX, trainY, batch_size)
 
 sess = model.restore_last_session()
-sess = model.train(train_batch_gen, val_batch_gen, batch_size)
+sess = model.train(train_batch_gen, val_batch_gen, len(validY))

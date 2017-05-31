@@ -16,7 +16,7 @@ class Seq2Seq(object):
             embedding_dim,
             num_layers, 
             lr=0.0001, 
-            epochs=100000, model_name='seq2seq_model'):
+            epochs=100000, save_freq=2, model_name='seq2seq_model'):
 
         # attach these arguments to self
         self.xseq_len = xseq_len
@@ -28,6 +28,7 @@ class Seq2Seq(object):
         self.ckpt_path = ckpt_path
         self.lr = lr
         self.epochs = epochs
+        self.save_freq = save_freq
         self.model_name = model_name
 
         # build comput graph
@@ -91,7 +92,7 @@ class Seq2Seq(object):
                 self.encoder_inputs, self.decoder_inputs, stacked_lstm, self.xvocab_size, self.yvocab_size, self.embedding_dim)
             
         with tf.variable_scope("train_test", reuse = True):
-            self.decoder_outputs, self.decoder_states_test = tf.contrib.legacy_seq2seq.embedding_rnn_seq2seq(
+            self.decoder_outputs_test, self.decoder_states_test = tf.contrib.legacy_seq2seq.embedding_rnn_seq2seq(
                 self.encoder_inputs, self.decoder_inputs, stacked_lstm, self.xvocab_size, self.yvocab_size, self.embedding_dim, feed_previous=True)
 
 
@@ -148,7 +149,7 @@ class Seq2Seq(object):
         return np.mean(losses)
 
 
-    def train(self, train_set, valid_set, batch_size, sess=None ):
+    def train(self, train_set, valid_set, valid_len, sess=None ):
         
         # we need to save the model periodically
         saver = tf.train.Saver()
@@ -165,11 +166,11 @@ class Seq2Seq(object):
         for i in range(self.epochs):
             try:
                 self.train_batch(sess, train_set)
-                if i and i % (self.epochs//2) == 0: # TODO : make this tunable by the user
+                if i and i % (self.epochs//self.save_freq) == 0: # TODO : make this tunable by the user
                     # save model to disk
                     saver.save(sess, self.ckpt_path + self.model_name + '.ckpt', global_step=i)
                     # evaluate to get validation loss
-                    val_loss = self.eval_batches(sess, valid_set, batch_size) # TODO : and this
+                    val_loss = self.eval_batches(sess, valid_set, valid_len) # TODO : and this
                     # print stats
                     print('\nModel saved to disk at iteration #{}'.format(i))
                     print('val   loss : {0:.6f}'.format(val_loss))
