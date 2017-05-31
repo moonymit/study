@@ -148,7 +148,7 @@ class Seq2Seq(object):
         return np.mean(losses)
 
 
-    def train(self, train_set, valid_set, sess=None ):
+    def train(self, train_set, valid_set, batch_size, sess=None ):
         
         # we need to save the model periodically
         saver = tf.train.Saver()
@@ -165,11 +165,11 @@ class Seq2Seq(object):
         for i in range(self.epochs):
             try:
                 self.train_batch(sess, train_set)
-                if i and i% (self.epochs//2) == 0: # TODO : make this tunable by the user
+                if i and i % (self.epochs//2) == 0: # TODO : make this tunable by the user
                     # save model to disk
                     saver.save(sess, self.ckpt_path + self.model_name + '.ckpt', global_step=i)
                     # evaluate to get validation loss
-                    val_loss = self.eval_batches(sess, valid_set, 16) # TODO : and this
+                    val_loss = self.eval_batches(sess, valid_set, batch_size) # TODO : and this
                     # print stats
                     print('\nModel saved to disk at iteration #{}'.format(i))
                     print('val   loss : {0:.6f}'.format(val_loss))

@@ -36,4 +36,4 @@ val_batch_gen = utils.rand_batch_gen(validX, validY, batch_size)
 train_batch_gen = utils.rand_batch_gen(trainX, trainY, batch_size)
 
 sess = model.restore_last_session()
-sess = model.train(train_batch_gen, val_batch_gen)
+sess = model.train(train_batch_gen, val_batch_gen, batch_size)
