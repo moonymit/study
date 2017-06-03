@@ -24,6 +24,13 @@ each of which is of dimension batch_size
 
 encoder 입력은 sequence 길이를 가진 tensor의 list이며, 
 각 tensor의 길이는 batch_size 이다.
+[
+    ['안', '반', '하']
+    ['녕', '가', '이']
+    ['하', '워', ' ']
+    ['세', '요', ' ']
+    ['요', ' ', ' ']
+]
 '''
 encoder_inputs = [tf.placeholder(tf.int32, shape=(None,), name="input{0}".format(t)) for t in range(seq_length)]
 labels = [tf.placeholder(tf.int32, shape=(None,), name="labels{0}".format(t)) for t in range(seq_length)]

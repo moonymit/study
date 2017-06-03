@@ -34,7 +34,7 @@ class Seq2Seq(object):
         # build comput graph
         sys.stdout.write('<log> Building Graph ')
         self.__graph__()
-        sys.stdout.write('</log>')
+        sys.stdout.write('</log>\n')
 
 
     # build graph
@@ -149,7 +149,7 @@ class Seq2Seq(object):
         return np.mean(losses)
 
 
-    def train(self, train_set, valid_set, valid_len, sess=None ):
+    def train(self, train_set, valid_set, num_batches, sess=None ):
         
         # we need to save the model periodically
         saver = tf.train.Saver()
@@ -170,7 +170,7 @@ class Seq2Seq(object):
                     # save model to disk
                     saver.save(sess, self.ckpt_path + self.model_name + '.ckpt', global_step=i)
                     # evaluate to get validation loss
-                    val_loss = self.eval_batches(sess, valid_set, valid_len) # TODO : and this
+                    val_loss = self.eval_batches(sess, valid_set, num_batches) # TODO : and this
                     # print stats
                     print('\nModel saved to disk at iteration #{}'.format(i))
                     print('val   loss : {0:.6f}'.format(val_loss))
@@ -179,6 +179,8 @@ class Seq2Seq(object):
                 print('Interrupted by user at iteration {}'.format(i))
                 self.session = sess
                 return sess
+
+        return sess
 
     def restore_last_session(self):
         saver = tf.train.Saver()

@@ -6,10 +6,10 @@ EN_BLACKLIST = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~\''
 FILENAME = 'data/chat.txt'
 
 limit = {
-        'maxq' : 20,
-        'minq' : 0,
-        'maxa' : 20,
-        'mina' : 3
+        'maxq' : 10,
+        'minq' : 1,
+        'maxa' : 10,
+        'mina' : 1
         }
 
 UNK = 'unk'
@@ -95,7 +95,7 @@ def filter_data(sequences):
     # print the fraction of the original data, filtered
     filt_data_len = len(filtered_q)
     filtered = int((raw_data_len - filt_data_len)*100/raw_data_len)
-    print(str(filtered) + '% filtered from original data')
+    print(str(filtered) + '% (removed) filtered from original data')
 
     return filtered_q, filtered_a
 
@@ -129,6 +129,18 @@ def zero_pad(qtokenized, atokenized, w2idx):
 
     return idx_q, idx_a
 
+def zero_pad_q(qtokenized, w2idx):
+    # num of rows
+    data_len = len(qtokenized)
+
+    # numpy arrays to store indices
+    idx_q = np.zeros([data_len, limit['maxq']], dtype=np.int32)
+
+    q_indices = pad_seq(qtokenized, w2idx, limit['maxq'])
+    idx_q = np.array(q_indices)
+
+    return idx_q
+    
 
 '''
  replace words with indices in a sequence
@@ -166,8 +178,10 @@ def process_data():
     # filter out too long or too short sequences
     print('\n>> 2nd layer of filtering')
     qlines, alines = filter_data(lines)
-    print('\nq : {0} ; a : {1}'.format(qlines[60], alines[60]))
-    print('\nq : {0} ; a : {1}'.format(qlines[61], alines[61]))
+    print('\n:: sentences length before filter: q + a:{}'.format(len(lines)))
+    print('\n:: sentences length : q : {}, a: {}'.format(len(qlines), len(alines)))
+    print('\nq : {0} ; a : {1}'.format(qlines[15], alines[15]))
+    print('\nq : {0} ; a : {1}'.format(qlines[16], alines[16]))
 
 
     # convert list of [lines of text] into list of [list of words ]
@@ -175,8 +189,8 @@ def process_data():
     qtokenized = [ wordlist.split(' ') for wordlist in qlines ]
     atokenized = [ wordlist.split(' ') for wordlist in alines ]
     print('\n:: Sample from segmented list of words')
-    print('\nq : {0} ; a : {1}'.format(qtokenized[60], atokenized[60]))
-    print('\nq : {0} ; a : {1}'.format(qtokenized[61], atokenized[61]))
+    print('\nq : {0} ; a : {1}'.format(qtokenized[15], atokenized[15]))
+    print('\nq : {0} ; a : {1}'.format(qtokenized[16], atokenized[16]))
 
 
     # indexing -> idx2w, w2idx : en/ta
@@ -185,6 +199,8 @@ def process_data():
 
     print('\n >> Zero Padding')
     idx_q, idx_a = zero_pad(qtokenized, atokenized, w2idx)
+    print(w2idx, '\n')
+    print(idx_q, '\n', idx_a, '\n')
 
     print('\n >> Save numpy arrays to disk')
     # save them
