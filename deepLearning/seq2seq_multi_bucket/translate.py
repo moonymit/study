@@ -15,7 +15,7 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
 import data_utils
-import seq2seq_model_v2
+import seq2seq_model
 
 tf.app.flags.DEFINE_float("learning_rate", 0.5, "Learning rate.")
 tf.app.flags.DEFINE_float("learning_rate_decay_factor", 0.99, "Learning rate decays by this much.")
@@ -34,7 +34,7 @@ tf.app.flags.DEFINE_string("to_dev_data", None, "Training data.")
 tf.app.flags.DEFINE_integer("max_train_data_size", 0, "Limit on the size of training data (0: no limit).")
 tf.app.flags.DEFINE_integer("steps_per_checkpoint", 200, "How many training steps to do per checkpoint.")
 tf.app.flags.DEFINE_boolean("decode", False, "Set to True for interactive decoding.")
-tf.app.flags.DEFINE_boolean("self_test", True, "Run a self-test if this is set to True.")
+tf.app.flags.DEFINE_boolean("self_test", False, "Run a self-test if this is set to True.")
 tf.app.flags.DEFINE_boolean("use_fp16", False, "Train using fp16 instead of fp32.")
 
 FLAGS = tf.app.flags.FLAGS
@@ -43,7 +43,7 @@ FLAGS = tf.app.flags.FLAGS
 # See seq2seq_model.Seq2SeqModel for details of how they work.
 _buckets = [(5, 10), (10, 15), (20, 25), (40, 50)]
 
-def read_data(source_path, target_path, max_size=None):
+def read_data(source_path, target_path, max_size=None, buckets=_buckets):
 	"""Read data from source and target files and put into buckets.
 
 	Read data from source and target files and put into buckets.
@@ -68,7 +68,7 @@ def read_data(source_path, target_path, max_size=None):
 
 	"""
 
-	data_set = [[] for _ in _buckets]
+	data_set = [[] for _ in buckets]
 	with tf.gfile.GFile(source_path, mode="r") as source_file:
 		with tf.gfile.GFile(target_path, mode="r") as target_file:
 			source, target = source_file.readline(), target_file.readline()
@@ -81,7 +81,7 @@ def read_data(source_path, target_path, max_size=None):
 				source_ids = [int(x) for x in source.split()]
 				target_ids = [int(x) for x in target.split()]
 				target_ids.append(data_utils.EOS_ID)
-				for bucket_id, (source_size, target_size) in enumerate(_buckets):
+				for bucket_id, (source_size, target_size) in enumerate(buckets):
 					if len(source_ids) < source_size and len(target_ids) < target_size:
 						data_set[bucket_id].append([source_ids, target_ids])
 						break
@@ -92,7 +92,7 @@ def read_data(source_path, target_path, max_size=None):
 def create_model(session, forward_only):
 	"""Create translation model and initialize or load parameters in session."""
 	dtype = tf.float16 if FLAGS.use_fp16 else tf.float32
-	model = seq2seq_model_v2.Seq2SeqModel(
+	model = seq2seq_model.Seq2SeqModel(
 		FLAGS.from_vocab_size,
 		FLAGS.to_vocab_size,
 		_buckets,
@@ -316,11 +316,8 @@ def self_test():
 	with tf.Session() as sess:
 		print("Self-test for neural translation model.")
 		# Create model with vocabularies of 10, 2 small buckets, 2 layers of 32.
-		model = seq2seq_model_v2.Seq2SeqModel(10, 10, [(3, 3), (6, 6)], 32, 2,
+		model = seq2seq_model.Seq2SeqModel(10, 10, [(3, 3), (6, 6)], 32, 2,
 												5.0, 16, 0.3, 0.99, num_samples=8)
-		
-		# 문장 하나에 대한 output을 얻기 위해서
-		model.batch_size = 1
 
 		# 변수 초기화
 		sess.run(tf.global_variables_initializer())
@@ -335,9 +332,30 @@ def self_test():
 			model.step(sess, encoder_inputs, decoder_inputs, target_weights, bucket_id, False)
 
 
+
 		#샘플 input(token_ids==문장)으로 결과를 가져오기
+
+		model.batch_size = 1 # 문장 하나에 대한 output을 얻기 위해서
+		
 		bucket_id = 0 #임의의 문자열에 대한 bucket id (buckets = [(3, 3), (6, 6)])
 		token_ids = [1, 2, 1] #임의의 문자열 idx
+
+		#encoder_inputs: [num of sentences x encoder_bucket_size].T
+		# if data_set == ([([1, 2,], [3, 4])], ), bucket(4, 4)
+		# encoder_input == [[PAD, PAD, 2, 1]] -> 
+		'''
+		[[PAD],
+		 [PAD],
+		 [2],
+		 [1]]
+		'''
+		# decoder_input == [[GO, 3, 4, PAD]] ->
+		'''
+		[[GO],
+		 [3],
+		 [4],
+		 [PAD]]
+		'''
 		encoder_inputs, decoder_inputs, target_weights = model.get_batch( 
 				{bucket_id: [(token_ids, [])]}, bucket_id)
 		_, _, output_logits = model.step(sess, encoder_inputs, decoder_inputs,
@@ -354,6 +372,7 @@ def self_test():
 		# 문장에 EOS_ID 태그가 있으면 그 전까지 잘라낸다.
 		if data_utils.EOS_ID in outputs:
 			outputs = outputs[:outputs.index(data_utils.EOS_ID)]
+
 
 def main(_):
 	if FLAGS.self_test:

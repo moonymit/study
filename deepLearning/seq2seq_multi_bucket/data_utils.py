@@ -103,6 +103,9 @@ def get_wmt_enfr_dev_set(directory):
 	return dev_path
 
 
+# 양쪽 공백을 지우고 띄워쓰기를 기준으로 나눠서 배열로 만든다
+# ([.,!?\"':;)(]) 를 구문자로 다시 나눈다.
+# 공백이 아닌 것들만 남긴다.
 def basic_tokenizer(sentence):
 	"""Very basic tokenizer: split the sentence into a list of tokens."""
 	words = []
@@ -111,6 +114,7 @@ def basic_tokenizer(sentence):
 	return [w for w in words if w]
 
 
+# vocabulary_path 에 파일이 없는 경우에만 생성한다.
 def create_vocabulary(vocabulary_path, data_path, max_vocabulary_size,
 											tokenizer=None, normalize_digits=True):
 	"""Create vocabulary file (if it does not exist yet) from data file.
@@ -177,9 +181,8 @@ def initialize_vocabulary(vocabulary_path):
 	else:
 		raise ValueError("Vocabulary file %s not found.", vocabulary_path)
 
-
-def sentence_to_token_ids(sentence, vocabulary,
-													tokenizer=None, normalize_digits=True):
+#주어진 문장을 vocabulary를 참고해서 id-tokens로 변경한다.
+def sentence_to_token_ids(sentence, vocabulary, tokenizer=None, normalize_digits=True):
 	"""Convert a string to list of integers representing token-ids.
 	For example, a sentence "I have a dog" may become tokenized into
 	["I", "have", "a", "dog"] and with vocabulary {"I": 1, "have": 2,
@@ -204,6 +207,10 @@ def sentence_to_token_ids(sentence, vocabulary,
 	return [vocabulary.get(_DIGIT_RE.sub(b"0", w), UNK_ID) for w in words]
 
 
+# data 파일(one-sentence-per-line)을 data_path에서 읽은뒤, vocabulary(vocabulary_path)를 참고해서
+# sentence를 token-ids 리스트로 변경한다.
+# 변경된 내용을 target_path에 저장한다.
+# tokenizer를 지정하면 해당 tokenizer(function)으로 tokenize한다.
 def data_to_token_ids(data_path, target_path, vocabulary_path,
 											tokenizer=None, normalize_digits=True):
 	"""Tokenize data file and turn into token-ids using given vocabulary file.
@@ -228,8 +235,7 @@ def data_to_token_ids(data_path, target_path, vocabulary_path,
 					counter += 1
 					if counter % 100000 == 0:
 						print("  tokenizing line %d" % counter)
-					token_ids = sentence_to_token_ids(tf.compat.as_bytes(line), vocab,
-																						tokenizer, normalize_digits)
+					token_ids = sentence_to_token_ids(tf.compat.as_bytes(line), vocab, tokenizer, normalize_digits)
 					tokens_file.write(" ".join([str(tok) for tok in token_ids]) + "\n")
 
 
