@@ -1,5 +1,5 @@
 data/test/
 data/train/
-data/test/test_data.npy
-data/test/train_data.npy
-data/test/submission_file.csv
+data/test_data.npy
+data/train_data.npy
+data/submission_file.csv
