@@ -1,4 +1,4 @@
 Stock Prediction
 =======================
 
-code: [a relative link](./rnn-stock-prediction.ipynb)
+File: [RNN Stock Prediction](./rnn-stock-prediction.ipynb)
